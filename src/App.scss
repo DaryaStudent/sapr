@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Play&display=swap');
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+
+}
+
+body {
+    background-color: #fafae9;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+}
+
+button:not(#openfile) {
+    border-radius: 0;
+}
+
+.container {
+    width: 90vw;
+    margin: 0 auto;
+}
+
+.mainNav ul {
+    width: 150px;
+    justify-content: space-around;
+    align-items: center;
+    list-style-type: none;
+    padding-bottom: 20px;
+    li {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        flex: 1 1 33.3%;
+        border: 1px solid black;
+        &:hover {
+            background-color: rgba(143, 143, 143, 0.82);
+            color: white;
+        }
+        a {
+            display: block;
+            text-decoration: none;
+        }
+    }
+}

@@ -1,0 +1,90 @@
+.post-processor {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+
+    &.error {
+        justify-content: center;
+        align-items: center;
+        height: 90vh;
+        div {
+            color: red;
+            font-size: 24px;
+        }
+    }
+
+    .plots {
+        .plot {
+            flex: 0 0 calc(50% - 40px);
+            margin: 20px;
+            &__title {
+                text-align: center;
+                margin: 5px 0;
+                font-size: 24px;
+            }
+        }
+    }
+
+    .exact-values {
+        display: flex;
+        justify-content: center;
+        input {
+            max-width: 60px;
+        }
+    }
+
+    .post-processor-table {
+        margin: 30px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        
+        input {
+            max-width: 50px;
+        }
+
+        td {
+            width:100px;
+            text-align: center;
+            &:hover {
+                background-color: rgba(131, 193, 243, 0.822);
+            }
+        }
+
+
+        .post-processor-table-interface {
+            display: flex;
+            justify-content: center;
+            div {
+                margin: 0 10px;
+            }
+        }
+
+        .step-for-table-input {
+            outline: none;
+        }
+
+        .step-for-table-input.error {
+            border: 1px solid red;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        td {
+            border: 1px solid black;
+            padding: 0.3em;
+            &.out-of-limit {
+                color: red;
+                font-weight: bold;
+                &::after {
+                    content: '*';
+                }
+            }
+        }
+
+        
+    }
+}
