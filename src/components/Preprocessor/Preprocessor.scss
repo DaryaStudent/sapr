@@ -14,7 +14,7 @@
     position: relative;
 
 
-    .preprocessor__rods {
+    .preprocessor__STERNs {
         flex: 1 1 100%;
 
         &-table {
@@ -32,7 +32,7 @@
                     background-color: rgba(231, 105, 105, 0.561);
                 }
 
-                &.preprocessor__rods-add-rod-button-td {
+                &.preprocessor__STERNs-add-stem-button-td {
                     border: none;
 
                     button {
@@ -42,7 +42,7 @@
                 }
             }
 
-            .preprocessor__rods-row-buttons {
+            .preprocessor__STERNs-row-buttons {
                 border: none;
 
                 button {
@@ -55,7 +55,7 @@
         &-interface {
             padding: 30px 0;
 
-            .preprocessor__rods-supports {
+            .preprocessor__STERNs-supports {
                 div {
                     font-size: 24px;
                     display: flex;
@@ -70,7 +70,7 @@
                 }
             }
 
-            .preprocessor__rods-buttons {
+            .preprocessor__STERNs-buttons {
                 div {
                     button {
                         font-size: 22px;
@@ -78,7 +78,7 @@
                 }
             }
 
-            .preprocessor__rods-openfile {
+            .preprocessor__STERNs-openfile {
                 display: flex;
                 flex-direction: column;
                 input, label {

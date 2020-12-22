@@ -32,10 +32,10 @@ function calculate(rodsRows, nodesRows, leftSupport, rightSupport) {
     const left = leftSupport.isChecked;
     const right = rightSupport.isChecked;
 
-    const rods = rodsData.map((rod) => [rod.modulus, rod.area, rod.length]);
+    const rods = rodsData.map((stem) => [stem.modulus, stem.area, stem.length]);
     const nodesLoads = nodesData.map((node) => node.nodeForce);
 
-    const rodsLoads = rodsData.map((rod) => rod.distLoad);
+    const rodsLoads = rodsData.map((stem) => stem.distLoad);
 
     const matrixA = [];
     for (let i = 0; i < rods.length + 1; i++) {
@@ -48,13 +48,13 @@ function calculate(rodsRows, nodesRows, leftSupport, rightSupport) {
 
     const rodSquares = [];
 
-    rods.forEach((rod) => {
+    rods.forEach((stem) => {
         let currentSquare = [];
         for (let i = 0; i < 2; i++) {
             currentSquare.push([0, 0]);
         }
         currentSquare = currentSquare.map((value) =>
-            value.map(() => (rod[0] * rod[1]) / rod[2])
+            value.map(() => (stem[0] * stem[1]) / stem[2])
         );
         currentSquare[0][1] *= -1;
         currentSquare[1][0] *= -1;
@@ -135,17 +135,17 @@ function calculate(rodsRows, nodesRows, leftSupport, rightSupport) {
     alert(`Результаты вычислений: ${alertData}`);
 
     const U = [];
-    rods.forEach((rod, index) => {
+    rods.forEach((stem, index) => {
         const Ux = (x) =>
             Number(
                 (
                     deltaMatrix[index] +
-                    (x / rod[2]) *
+                    (x / stem[2]) *
                         (deltaMatrix[index + 1] - deltaMatrix[index]) +
-                    ((rodsLoads[index] * rod[2] * rod[2]) /
-                        (2 * rod[0] * rod[1])) *
-                        (x / rod[2]) *
-                        (1 - x / rod[2])
+                    ((rodsLoads[index] * stem[2] * stem[2]) /
+                        (2 * stem[0] * stem[1])) *
+                        (x / stem[2]) *
+                        (1 - x / stem[2])
                 ).toFixed(12)
             );
         U.push(Ux);
@@ -153,17 +153,17 @@ function calculate(rodsRows, nodesRows, leftSupport, rightSupport) {
 
     const N = [];
     const S = [];
-    rods.forEach((rod, index) => {
+    rods.forEach((stem, index) => {
         const Nx = (x) =>
             Number(
                 (
-                    ((rod[0] * rod[1]) / rod[2]) *
+                    ((stem[0] * stem[1]) / stem[2]) *
                         (deltaMatrix[index + 1] - deltaMatrix[index]) +
-                    ((rodsLoads[index] * rod[2]) / 2) * (1 - 2 * (x / rod[2]))
+                    ((rodsLoads[index] * stem[2]) / 2) * (1 - 2 * (x / stem[2]))
                 ).toFixed(10)
             );
         N.push(Nx);
-        S.push((x) => Nx(x) / rod[1]);
+        S.push((x) => Nx(x) / stem[1]);
     });
 
     const UNS_Object = {

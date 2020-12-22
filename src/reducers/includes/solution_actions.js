@@ -1,0 +1,2 @@
+export const SAVE_SOLUTION = "SAVE_SOLUTION";
+export const CLEAR_SOLUTION = "CLEAR_SOLUTION";

@@ -9,22 +9,22 @@ function ConstructionCanvas(props) {
     const arrowLength = 30;
     const initialLineWidth = 2;
 
-    const reducedNodesRows = [];
+    const reducedVortexsRows = [];
     for (let i = 0; i < props.data.rodsRows.length + 1; i++) {
-        reducedNodesRows.push({ nodeNumber: i + 1, nodeForce: 0 });
+        reducedVortexsRows.push({ nodeNumber: i + 1, nodeForce: 0 });
     }
     props.data.nodesRows.forEach((node) => {
-        reducedNodesRows[node.nodeNumber - 1].nodeForce += node.nodeForce;
+        reducedVortexsRows[node.nodeNumber - 1].nodeForce += node.nodeForce;
     });
 
-    reducedNodesRows.forEach((node) => {
+    reducedVortexsRows.forEach((node) => {
         node.nodeForce = Number(node.nodeForce.toFixed(5));
     });
 
     const data = {
-        rodsAndNodes: {
+        rodsAndVortexs: {
             rodsRows: [...props.data.rodsRows],
-            nodesRows: reducedNodesRows,
+            nodesRows: reducedVortexsRows,
             leftSupport: { ...props.data.leftSupport },
             rightSupport: { ...props.data.rightSupport },
         },
@@ -97,11 +97,6 @@ function ConstructionCanvas(props) {
         );
     }
 
-    function resetCanvas() {
-        setZoomScale(1);
-        setGlobalDX(centralAxisStart.x);
-        setGlobalDY(centralAxisStart.y);
-    }
 
     function canvas_distArrow(context, fromx, fromy, tox, toy) {
         let headlen = 8; // length of head in pixels
@@ -257,13 +252,13 @@ function ConstructionCanvas(props) {
         }
     }
     function drawConcLoad(index) {
-        if (data.rodsAndNodes.nodesRows[index].nodeForce !== 0) {
+        if (data.rodsAndVortexs.nodesRows[index].nodeForce !== 0) {
             if (
                 !(
-                    data.rodsAndNodes.rightSupport.nodeNumber ===
-                    data.rodsAndNodes.nodesRows[index].nodeNumber
+                    data.rodsAndVortexs.rightSupport.nodeNumber ===
+                    data.rodsAndVortexs.nodesRows[index].nodeNumber
                 ) &&
-                data.rodsAndNodes.nodesRows[index].nodeForce > 0
+                data.rodsAndVortexs.nodesRows[index].nodeForce > 0
             ) {
                 canvas_concArrow(
                     contextRef.current,
@@ -276,10 +271,10 @@ function ConstructionCanvas(props) {
                 );
             } else if (
                 !(
-                    data.rodsAndNodes.leftSupport.nodeNumber ===
-                    data.rodsAndNodes.nodesRows[index].nodeNumber
+                    data.rodsAndVortexs.leftSupport.nodeNumber ===
+                    data.rodsAndVortexs.nodesRows[index].nodeNumber
                 ) &&
-                data.rodsAndNodes.nodesRows[index].nodeForce < 0
+                data.rodsAndVortexs.nodesRows[index].nodeForce < 0
             ) {
                 canvas_concArrow(
                     contextRef.current,
@@ -297,8 +292,8 @@ function ConstructionCanvas(props) {
     const draw = () => {
         const ctx = contextRef.current;
         ctx.lineWidth = initialLineWidth;
-        data.rodsAndNodes.rodsRows.forEach((rodRow, index) => {
-            if (data.rodsAndNodes.leftSupport.nodeNumber === index + 1) {
+        data.rodsAndVortexs.rodsRows.forEach((rodRow, index) => {
+            if (data.rodsAndVortexs.leftSupport.nodeNumber === index + 1) {
                 drawSupport(ctx, 20, 100, 5, 10, 15);
             }
             const area = rodRow.area;
@@ -314,9 +309,9 @@ function ConstructionCanvas(props) {
             drawDistLoad(rodLength, distLoad, arrowLength);
             drawConcLoad(index);
             ctx.translate(rodLength, 0);
-            if (index === data.rodsAndNodes.nodesRows.length - 2) {
+            if (index === data.rodsAndVortexs.nodesRows.length - 2) {
                 drawConcLoad(index + 1);
-                if (data.rodsAndNodes.rightSupport.nodeNumber === index + 2) {
+                if (data.rodsAndVortexs.rightSupport.nodeNumber === index + 2) {
                     drawSupport(ctx, 20, 100, 5, 10, 15, true);
                 }
             }

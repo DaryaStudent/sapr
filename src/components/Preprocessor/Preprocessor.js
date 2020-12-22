@@ -1,28 +1,27 @@
-import React, { useRef } from "react";
 import { connect } from "react-redux";
 import {
-    addNewRod,
-    newRodAreaChanged,
-    newRodLengthChanged,
-    newRodModulusChanged,
-    newRodSigmaChanged,
-    newRodDistLoadChanged,
-    changeRod,
-    changingRodAreaChanged,
-    changingRodLengthChanged,
-    changingRodModulusChanged,
-    changingRodSigmaChanged,
-    changingRodDistLoadChanged,
-    changingRodSubmit,
-    removeRodRow,
-    addNodeRow,
-    newNodeNumberChanged,
-    newNodeForceChanged,
-    removeNodeRow,
-    changeNode,
-    changingNodeNumberChanged,
-    changingNodeForceChanged,
-    changingNodeSubmit,
+    addNewStern,
+    newSternAreaChanged,
+    newSternLengthChanged,
+    newSternModulusChanged,
+    newSternSigmaChanged,
+    newSternDistLoadChanged,
+    changeStern,
+    changingSternAreaChanged,
+    changingSternLengthChanged,
+    changingSternModulusChanged,
+    changingSternSigmaChanged,
+    changingSternDistLoadChanged,
+    changingSternSubmit,
+    removeSternRow,
+    addVortexRow,
+    newVortexNumberChanged,
+    newVortexForceChanged,
+    removeVortexRow,
+    changeVortex,
+    changingVortexNumberChanged,
+    changingVortexForceChanged,
+    changingVortexSubmit,
     changeLeftSupport,
     changeRightSupport,
     checkForError,
@@ -35,12 +34,11 @@ import ConstructionCanvas from "./ConstructionCanvas";
 import "./Preprocessor.scss";
 
 function Preprocessor(props) {
-    const openFileInputRef = useRef(null);
     return (
         <div className="preprocessor__body">
-            <div className="preprocessor__rods">
+            <div className="preprocessor__STERNs">
 
-                <table class="preprocessor__rods-table">
+                <table class="preprocessor__STERNs-table">
                     <thead>
                         <tr>
                             <th>Стержень</th>
@@ -53,24 +51,24 @@ function Preprocessor(props) {
                     </thead>
                     <tbody>
                         {props.rodsRows.map((rodRow) => {
-                            if (rodRow.index === props.changingRodIndex) {
+                            if (rodRow.index === props.changingSternIndex) {
                                 return (
                                     <tr>
-                                        <td>{props.changingRodIndex}</td>
+                                        <td>{props.changingSternIndex}</td>
                                         <td>
                                             <input
                                                 type="text"
                                                 value={
-                                                    props.changingRodInputRow
+                                                    props.changingSternInputRow
                                                         .area
                                                 }
                                                 onChange={(e) =>
-                                                    props.changingRodAreaChanged(
+                                                    props.changingSternAreaChanged(
                                                         e.target.value
                                                     )
                                                 }
                                                 className={`table-input ${
-                                                    props.changingRodInputRow
+                                                    props.changingSternInputRow
                                                         .isAreaCorrect
                                                         ? ""
                                                         : "input-error"
@@ -81,16 +79,16 @@ function Preprocessor(props) {
                                             <input
                                                 type="text"
                                                 value={
-                                                    props.changingRodInputRow
+                                                    props.changingSternInputRow
                                                         .length
                                                 }
                                                 onChange={(e) =>
-                                                    props.changingRodLengthChanged(
+                                                    props.changingSternLengthChanged(
                                                         e.target.value
                                                     )
                                                 }
                                                 className={`table-input ${
-                                                    props.changingRodInputRow
+                                                    props.changingSternInputRow
                                                         .isLengthCorrect
                                                         ? ""
                                                         : "input-error"
@@ -101,16 +99,16 @@ function Preprocessor(props) {
                                             <input
                                                 type="text"
                                                 value={
-                                                    props.changingRodInputRow
+                                                    props.changingSternInputRow
                                                         .modulus
                                                 }
                                                 onChange={(e) =>
-                                                    props.changingRodModulusChanged(
+                                                    props.changingSternModulusChanged(
                                                         e.target.value
                                                     )
                                                 }
                                                 className={`table-input ${
-                                                    props.changingRodInputRow
+                                                    props.changingSternInputRow
                                                         .isModulusCorrect
                                                         ? ""
                                                         : "input-error"
@@ -121,16 +119,16 @@ function Preprocessor(props) {
                                             <input
                                                 type="text"
                                                 value={
-                                                    props.changingRodInputRow
+                                                    props.changingSternInputRow
                                                         .sigma
                                                 }
                                                 onChange={(e) =>
-                                                    props.changingRodSigmaChanged(
+                                                    props.changingSternSigmaChanged(
                                                         e.target.value
                                                     )
                                                 }
                                                 className={`table-input ${
-                                                    props.changingRodInputRow
+                                                    props.changingSternInputRow
                                                         .isSigmaCorrect
                                                         ? ""
                                                         : "input-error"
@@ -141,16 +139,16 @@ function Preprocessor(props) {
                                             <input
                                                 type="text"
                                                 value={
-                                                    props.changingRodInputRow
+                                                    props.changingSternInputRow
                                                         .distLoad
                                                 }
                                                 onChange={(e) =>
-                                                    props.changingRodDistLoadChanged(
+                                                    props.changingSternDistLoadChanged(
                                                         e.target.value
                                                     )
                                                 }
                                                 className={`table-input ${
-                                                    props.changingRodInputRow
+                                                    props.changingSternInputRow
                                                         .isDistLoadCorrect
                                                         ? ""
                                                         : "input-error"
@@ -162,7 +160,7 @@ function Preprocessor(props) {
                                         >
                                             <button
                                                 onClick={() => {
-                                                    props.changingRodSubmit();
+                                                    props.changingSternSubmit();
                                                     props.clearSolution();
                                                 }}>
                                                 ✓
@@ -179,7 +177,7 @@ function Preprocessor(props) {
                                     <td>{rodRow.modulus}</td>
                                     <td>{rodRow.sigma}</td>
                                     <td>{rodRow.distLoad}</td>
-                                    <td className="preprocessor__rods-row-buttons">
+                                    <td className="preprocessor__STERNs-row-buttons">
                                     </td>
                                 </tr>
                             );
@@ -189,28 +187,28 @@ function Preprocessor(props) {
                             <td>
                                 <input
                                     className={`table-input ${
-                                        props.newRodInputRow.isAreaCorrect
+                                        props.newSternInputRow.isAreaCorrect
                                             ? ""
                                             : "input-error"
                                     }`}
                                     type="text"
-                                    value={props.newRodInputRow.area}
+                                    value={props.newSternInputRow.area}
                                     onChange={(e) => {
-                                        props.newRodAreaChanged(e.target.value);
+                                        props.newSternAreaChanged(e.target.value);
                                     }}
                                 />
                             </td>
                             <td>
                                 <input
                                     className={`table-input ${
-                                        props.newRodInputRow.isLengthCorrect
+                                        props.newSternInputRow.isLengthCorrect
                                             ? ""
                                             : "input-error"
                                     }`}
                                     type="text"
-                                    value={props.newRodInputRow.length}
+                                    value={props.newSternInputRow.length}
                                     onChange={(e) => {
-                                        props.newRodLengthChanged(
+                                        props.newSternLengthChanged(
                                             e.target.value
                                         );
                                     }}
@@ -219,14 +217,14 @@ function Preprocessor(props) {
                             <td>
                                 <input
                                     className={`table-input ${
-                                        props.newRodInputRow.isModulusCorrect
+                                        props.newSternInputRow.isModulusCorrect
                                             ? ""
                                             : "input-error"
                                     }`}
                                     type="text"
-                                    value={props.newRodInputRow.modulus}
+                                    value={props.newSternInputRow.modulus}
                                     onChange={(e) => {
-                                        props.newRodModulusChanged(
+                                        props.newSternModulusChanged(
                                             e.target.value
                                         );
                                     }}
@@ -235,14 +233,14 @@ function Preprocessor(props) {
                             <td>
                                 <input
                                     className={`table-input ${
-                                        props.newRodInputRow.isSigmaCorrect
+                                        props.newSternInputRow.isSigmaCorrect
                                             ? ""
                                             : "input-error"
                                     }`}
                                     type="text"
-                                    value={props.newRodInputRow.sigma}
+                                    value={props.newSternInputRow.sigma}
                                     onChange={(e) => {
-                                        props.newRodSigmaChanged(
+                                        props.newSternSigmaChanged(
                                             e.target.value
                                         );
                                     }}
@@ -251,24 +249,24 @@ function Preprocessor(props) {
                             <td>
                                 <input
                                     className={`table-input ${
-                                        props.newRodInputRow.isDistLoadCorrect
+                                        props.newSternInputRow.isDistLoadCorrect
                                             ? ""
                                             : "input-error"
                                     }`}
                                     type="text"
-                                    value={props.newRodInputRow.distLoad}
+                                    value={props.newSternInputRow.distLoad}
                                     onChange={(e) => {
-                                        props.newRodDistLoadChanged(
+                                        props.newSternDistLoadChanged(
                                             e.target.value
                                         );
                                     }}
                                 />
                             </td>
-                            <td className="preprocessor__rods-add-rod-button-td">
+                            <td className="preprocessor__STERNs-add-stem-button-td">
                                 <button
-                                    className="preprocessor__rods-add-rod-button"
+                                    className="preprocessor__STERNs-add-stem-button"
                                     onClick={() => {
-                                        props.addRod();
+                                        props.addStern();
                                         props.changeLeftSupport(
                                             props.leftSupport.isChecked
                                         );
@@ -295,24 +293,24 @@ function Preprocessor(props) {
                     </thead>
                     <tbody>
                         {props.nodesRows.map((nodeRow, index) => {
-                            if (index === props.changingNodeIndex) {
+                            if (index === props.changingVortexIndex) {
                                 return (
                                     <tr>
                                         <td>
                                             <input
                                                 type="text"
                                                 value={
-                                                    props.changingNodeInputRow
+                                                    props.changingVortexInputRow
                                                         .nodeNumber
                                                 }
                                                 onChange={(e) =>
-                                                    props.changingNodeNumberChanged(
+                                                    props.changingVortexNumberChanged(
                                                         e.target.value
                                                     )
                                                 }
                                                 className={`table-input ${
-                                                    props.changingNodeInputRow
-                                                        .isNodeNumberCorrect
+                                                    props.changingVortexInputRow
+                                                        .isVortexNumberCorrect
                                                         ? ""
                                                         : "input-error"
                                                 }`}
@@ -322,17 +320,17 @@ function Preprocessor(props) {
                                             <input
                                                 type="text"
                                                 value={
-                                                    props.changingNodeInputRow
+                                                    props.changingVortexInputRow
                                                         .nodeForce
                                                 }
                                                 onChange={(e) =>
-                                                    props.changingNodeForceChanged(
+                                                    props.changingVortexForceChanged(
                                                         e.target.value
                                                     )
                                                 }
                                                 className={`table-input ${
-                                                    props.changingNodeInputRow
-                                                        .isNodeForceCorrect
+                                                    props.changingVortexInputRow
+                                                        .isVortexForceCorrect
                                                         ? ""
                                                         : "input-error"
                                                 }`}
@@ -343,7 +341,7 @@ function Preprocessor(props) {
                                         >
                                             <button
                                                 onClick={() => {
-                                                    props.changingNodeSubmit();
+                                                    props.changingVortexSubmit();
                                                     props.checkForError();
                                                     props.clearSolution();
                                                 }}>
@@ -367,15 +365,15 @@ function Preprocessor(props) {
                             <td>
                                 <input
                                     type="text"
-                                    value={props.newNodeInputRow.nodeNumber}
+                                    value={props.newVortexInputRow.nodeNumber}
                                     onChange={(e) =>
-                                        props.newNodeNumberChanged(
+                                        props.newVortexNumberChanged(
                                             e.target.value
                                         )
                                     }
                                     className={`table-input ${
-                                        props.newNodeInputRow
-                                            .isNodeNumberCorrect
+                                        props.newVortexInputRow
+                                            .isVortexNumberCorrect
                                             ? ""
                                             : "input-error"
                                     }`}
@@ -384,14 +382,14 @@ function Preprocessor(props) {
                             <td>
                                 <input
                                     type="text"
-                                    value={props.newNodeInputRow.nodeForce}
+                                    value={props.newVortexInputRow.nodeForce}
                                     onChange={(e) =>
-                                        props.newNodeForceChanged(
+                                        props.newVortexForceChanged(
                                             e.target.value
                                         )
                                     }
                                     className={`table-input ${
-                                        props.newNodeInputRow.isNodeForceCorrect
+                                        props.newVortexInputRow.isVortexForceCorrect
                                             ? ""
                                             : "input-error"
                                     }`}
@@ -400,7 +398,7 @@ function Preprocessor(props) {
                             <td className="preprocessor__nodes-button-td">
                                 <button
                                     onClick={() => {
-                                        props.addNodeRow();
+                                        props.addVortexRow();
                                         props.checkForError();
                                     }}>
                                     Добавить нагрузку
@@ -410,8 +408,8 @@ function Preprocessor(props) {
                     </tbody>
                 </table>
             </div>
-            <div className="preprocessor__rods-interface">
-                <div className="preprocessor__rods-supports">
+            <div className="preprocessor__STERNs-interface">
+                <div className="preprocessor__STERNs-supports">
                     <div>
                         Левая заделка
                         <input
@@ -438,7 +436,7 @@ function Preprocessor(props) {
                         />
                     </div>
                 </div>
-                {/*<div className="preprocessor__rods-buttons">*/}
+                {/*<div className="preprocessor__STERNs-buttons">*/}
                 {/*    <div>*/}
                 {/*        <button*/}
                 {/*            // disabled={!props.isReadyForSave}*/}
@@ -464,61 +462,61 @@ function Preprocessor(props) {
 
 const mapStateToProps = (state) => {
     return {
-        rodsRows: state.rodsAndNodes.rodsRows,
-        newRodInputRow: state.rodsAndNodes.newRodInputRow,
-        changingRodIndex: state.rodsAndNodes.changingRodIndex,
-        changingRodInputRow: state.rodsAndNodes.changingRodInputRow,
+        rodsRows: state.rodsAndVortexs.rodsRows,
+        newSternInputRow: state.rodsAndVortexs.newSternInputRow,
+        changingSternIndex: state.rodsAndVortexs.changingSternIndex,
+        changingSternInputRow: state.rodsAndVortexs.changingSternInputRow,
 
-        nodesRows: state.rodsAndNodes.nodesRows,
-        newNodeInputRow: state.rodsAndNodes.newNodeInputRow,
-        changingNodeIndex: state.rodsAndNodes.changingNodeIndex,
-        changingNodeInputRow: state.rodsAndNodes.changingNodeInputRow,
+        nodesRows: state.rodsAndVortexs.nodesRows,
+        newVortexInputRow: state.rodsAndVortexs.newVortexInputRow,
+        changingVortexIndex: state.rodsAndVortexs.changingVortexIndex,
+        changingVortexInputRow: state.rodsAndVortexs.changingVortexInputRow,
 
-        leftSupport: state.rodsAndNodes.leftSupport,
-        rightSupport: state.rodsAndNodes.rightSupport,
+        leftSupport: state.rodsAndVortexs.leftSupport,
+        rightSupport: state.rodsAndVortexs.rightSupport,
 
-        isError: state.rodsAndNodes.isError,
-        errorMessage: state.rodsAndNodes.errorMessage,
-        isReadyForSave: state.rodsAndNodes.isReadyForSave,
-        isCanvasShown: state.rodsAndNodes.isCanvasShown,
+        isError: state.rodsAndVortexs.isError,
+        errorMessage: state.rodsAndVortexs.errorMessage,
+        isReadyForSave: state.rodsAndVortexs.isReadyForSave,
+        isCanvasShown: state.rodsAndVortexs.isCanvasShown,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        addRod: () => dispatch(addNewRod()),
-        newRodAreaChanged: (value) => {
-            dispatch(newRodAreaChanged(value));
+        addStern: () => dispatch(addNewStern()),
+        newSternAreaChanged: (value) => {
+            dispatch(newSternAreaChanged(value));
         },
-        newRodLengthChanged: (value) => dispatch(newRodLengthChanged(value)),
-        newRodModulusChanged: (value) => dispatch(newRodModulusChanged(value)),
-        newRodSigmaChanged: (value) => dispatch(newRodSigmaChanged(value)),
-        newRodDistLoadChanged: (value) =>
-            dispatch(newRodDistLoadChanged(value)),
-        changeRod: (index) => dispatch(changeRod(index)),
-        changingRodAreaChanged: (value) =>
-            dispatch(changingRodAreaChanged(value)),
-        changingRodLengthChanged: (value) =>
-            dispatch(changingRodLengthChanged(value)),
-        changingRodModulusChanged: (value) =>
-            dispatch(changingRodModulusChanged(value)),
-        changingRodSigmaChanged: (value) =>
-            dispatch(changingRodSigmaChanged(value)),
-        changingRodDistLoadChanged: (value) =>
-            dispatch(changingRodDistLoadChanged(value)),
-        changingRodSubmit: () => dispatch(changingRodSubmit()),
-        removeRodRow: (index) => dispatch(removeRodRow(index)),
+        newSternLengthChanged: (value) => dispatch(newSternLengthChanged(value)),
+        newSternModulusChanged: (value) => dispatch(newSternModulusChanged(value)),
+        newSternSigmaChanged: (value) => dispatch(newSternSigmaChanged(value)),
+        newSternDistLoadChanged: (value) =>
+            dispatch(newSternDistLoadChanged(value)),
+        changeStern: (index) => dispatch(changeStern(index)),
+        changingSternAreaChanged: (value) =>
+            dispatch(changingSternAreaChanged(value)),
+        changingSternLengthChanged: (value) =>
+            dispatch(changingSternLengthChanged(value)),
+        changingSternModulusChanged: (value) =>
+            dispatch(changingSternModulusChanged(value)),
+        changingSternSigmaChanged: (value) =>
+            dispatch(changingSternSigmaChanged(value)),
+        changingSternDistLoadChanged: (value) =>
+            dispatch(changingSternDistLoadChanged(value)),
+        changingSternSubmit: () => dispatch(changingSternSubmit()),
+        removeSternRow: (index) => dispatch(removeSternRow(index)),
 
-        addNodeRow: () => dispatch(addNodeRow()),
-        removeNodeRow: (index) => dispatch(removeNodeRow(index)),
-        changeNode: (index) => dispatch(changeNode(index)),
-        newNodeNumberChanged: (value) => dispatch(newNodeNumberChanged(value)),
-        newNodeForceChanged: (value) => dispatch(newNodeForceChanged(value)),
-        changingNodeNumberChanged: (value) =>
-            dispatch(changingNodeNumberChanged(value)),
-        changingNodeForceChanged: (value) =>
-            dispatch(changingNodeForceChanged(value)),
-        changingNodeSubmit: () => dispatch(changingNodeSubmit()),
+        addVortexRow: () => dispatch(addVortexRow()),
+        removeVortexRow: (index) => dispatch(removeVortexRow(index)),
+        changeVortex: (index) => dispatch(changeVortex(index)),
+        newVortexNumberChanged: (value) => dispatch(newVortexNumberChanged(value)),
+        newVortexForceChanged: (value) => dispatch(newVortexForceChanged(value)),
+        changingVortexNumberChanged: (value) =>
+            dispatch(changingVortexNumberChanged(value)),
+        changingVortexForceChanged: (value) =>
+            dispatch(changingVortexForceChanged(value)),
+        changingVortexSubmit: () => dispatch(changingVortexSubmit()),
         changeLeftSupport: (isChecked) =>
             dispatch(changeLeftSupport(isChecked)),
         changeRightSupport: (isChecked) =>

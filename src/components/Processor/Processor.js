@@ -6,20 +6,20 @@ import { saveSolution } from "./../../reducers/reducer";
 
 function Processor(props) {
     const compute = () => {
-        const reducedNodesRows = [];
+        const reducedVortexsRows = [];
         for (let i = 0; i < props.rodsRows.length + 1; i++) {
-            reducedNodesRows.push({ nodeNumber: i + 1, nodeForce: 0 });
+            reducedVortexsRows.push({ nodeNumber: i + 1, nodeForce: 0 });
         }
         props.nodesRows.forEach((node) => {
-            reducedNodesRows[node.nodeNumber - 1].nodeForce += node.nodeForce;
+            reducedVortexsRows[node.nodeNumber - 1].nodeForce += node.nodeForce;
         });
 
-        reducedNodesRows.forEach((node) => {
+        reducedVortexsRows.forEach((node) => {
             node.nodeForce = Number(node.nodeForce.toFixed(5));
         });
         const solution = calculate(
             props.rodsRows,
-            reducedNodesRows,
+            reducedVortexsRows,
             props.leftSupport,
             props.rightSupport
         );
@@ -43,12 +43,12 @@ function Processor(props) {
 
 const mapStateToProps = (state) => {
     return {
-        isReadyForComputation: state.rodsAndNodes.isReadyForSave,
-        isConstructionComputed: state.rodsAndNodes.objWithSolutionFunctions,
-        rodsRows: state.rodsAndNodes.rodsRows,
-        nodesRows: state.rodsAndNodes.nodesRows,
-        leftSupport: state.rodsAndNodes.leftSupport,
-        rightSupport: state.rodsAndNodes.rightSupport,
+        isReadyForComputation: state.rodsAndVortexs.isReadyForSave,
+        isConstructionComputed: state.rodsAndVortexs.objWithSolutionFunctions,
+        rodsRows: state.rodsAndVortexs.rodsRows,
+        nodesRows: state.rodsAndVortexs.nodesRows,
+        leftSupport: state.rodsAndVortexs.leftSupport,
+        rightSupport: state.rodsAndVortexs.rightSupport,
     };
 };
 

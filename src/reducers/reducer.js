@@ -1,50 +1,67 @@
 import { v4 as uuidv4 } from "uuid";
 
-const ADD_NEW_ROD = "ADD_NEW_ROD";
-const NEW_ROD_AREA_CHANGED = "NEW_ROD_AREA_CHANGED";
-const NEW_ROD_LENGTH_CHANGED = "NEW_ROD_LENGTH_CHANGED";
-const NEW_ROD_MODULUS_CHANGED = "NEW_ROD_MODULUS_CHANGED";
-const NEW_ROD_SIGMA_CHANGED = "NEW_ROD_SIGMA_CHANGED";
-const NEW_ROD_DISTLOAD_CHANGED = "NEW_ROD_DISTLOAD_CHANGED";
+import {
+    SAVE_SOLUTION,
+    CLEAR_SOLUTION
+} from "./includes/solution_actions";
 
-const CHANGE_ROD = "CHANGE_ROD";
-const CHANGING_ROD_AREA_CHANGED = "CHANGING_ROD_AREA_CHANGED";
-const CHANGING_ROD_LENGTH_CHANGED = "CHANGING_ROD_LENGTH_CHANGED";
-const CHANGING_ROD_MODULUS_CHANGED = "CHANGING_ROD_MODULUS_CHANGED";
-const CHANGING_ROD_SIGMA_CHANGED = "CHANGING_ROD_SIGMA_CHANGED";
-const CHANGING_ROD_DISTLOAD_CHANGED = "CHANGING_ROD_DISTLOAD_CHANGED";
-const CHANGING_ROD_SUBMIT = "CHANGING_ROD_SUBMIT";
+import {
+    SET_NEW_CONSTRUCTION_FROM_FILE_DATA
+} from "./includes/file_actions";
 
-const REMOVE_ROD_ROW = "REMOVE_ROD_ROW";
-const ADD_NODE_ROW = "ADD_NODE_ROW";
-const NEW_NODE_NUMBER_CHANGED = "NEW_NODE_NUMBER_CHANGED";
-const NEW_NODE_FORCE_CHANGED = "NEW_NODE_FORCE_CHANGED";
+import {
+    ADD_NEW_STERN,
+    NEW_STERN_AREA_CHANGED,
+    NEW_STERN_LENGTH_CHANGED,
+    NEW_STERN_MODULUS_CHANGED,
+    NEW_STERN_SIGMA_CHANGED,
+    NEW_STERN_DISTLOAD_CHANGED,
+    CHANGE_STERN,
+    CHANGING_STERN_AREA_CHANGED,
+    CHANGING_STERN_LENGTH_CHANGED,
+    CHANGING_STERN_MODULUS_CHANGED,
+    CHANGING_STERN_SIGMA_CHANGED,
+    CHANGING_STERN_DISTLOAD_CHANGED,
+    CHANGING_STERN_SUBMIT,
+    REMOVE_STERN_ROW,
+} from "./includes/rod_actions";
 
-const CHANGE_NODE = "CHANGE_NODE";
-const REMOVE_NODE_ROW = "REMOVE_NODE_ROW";
+import {
+    SHOW_CANVAS
+} from "./includes/canvas_actions";
 
-const CHANGING_NODE_NUMBER_CHANGED = "CHANGING_NODE_NUMBER_CHANGED";
-const CHANGING_NODE_FORCE_CHANGED = "CHANGING_NODE_FORCE_CHANGED";
-const CHANGING_NODE_SUBMIT = "CHANGING_NODE_SUBMIT";
+import {
+    ADD_NODE_ROW,
+    NEW_NODE_NUMBER_CHANGED,
+    NEW_NODE_FORCE_CHANGED,
+    CHANGE_NODE,
+    REMOVE_NODE_ROW,
+    CHANGING_NODE_NUMBER_CHANGED,
+    CHANGING_NODE_FORCE_CHANGED,
+    CHANGING_NODE_SUBMIT,
+} from "./includes/node_actions";
 
-const CHANGE_LEFT_SUPPORT = "CHANGE_LEFT_SUPPORT";
-const CHANGE_RIGHT_SUPPORT = "CHANGE_RIGHT_SUPPORT";
+import {
+    CHANGE_LEFT_SUPPORT,
+    CHANGE_RIGHT_SUPPORT
+} from "./includes/supprot_actions";
 
-const CHECK_FOR_ERROR = "CHECK_FOR_ERROR";
-const SHOW_CONSTRUCTION_FROM_FILE_ERROR = "SHOW_CONSTRUCTION_FROM_FILE_ERROR";
-const SET_NEW_CONSTRUCTION_FROM_FILE_DATA =
-    "SET_NEW_CONSTRUCTION_FROM_FILE_DATA";
+import {
+    CHECK_FOR_ERROR,
+    SHOW_CONSTRUCTION_FROM_FILE_ERROR
+} from "./includes/error_actions";
 
-const SAVE_SOLUTION = "SAVE_SOLUTION";
-const CLEAR_SOLUTION = "CLEAR_SOLUTION";
+import {
+    handleFileOpening
+} from "./includes/file_actions"
 
-const SHOW_CANVAS = "SHOW_CANVAS"
+export {handleFileOpening};
 
 const initialState = {
     rodsRows: [],
     nodesRows: [],
-    changingRodIndex: null,
-    changingRodInputRow: {
+    changingSternIndex: null,
+    changingSternInputRow: {
         area: "",
         isAreaCorrect: true,
         length: "",
@@ -56,7 +73,7 @@ const initialState = {
         distLoad: "",
         isDistLoadCorrect: true,
     },
-    newRodInputRow: {
+    newSternInputRow: {
         area: "",
         isAreaCorrect: true,
         length: "",
@@ -68,18 +85,18 @@ const initialState = {
         distLoad: "",
         isDistLoadCorrect: true,
     },
-    newNodeInputRow: {
+    newVortexInputRow: {
         nodeNumber: "",
-        isNodeNumberCorrect: true,
+        isVortexNumberCorrect: true,
         nodeForce: "",
-        isNodeForceCorrect: true,
+        isVortexForceCorrect: true,
     },
-    changingNodeIndex: null,
-    changingNodeInputRow: {
+    changingVortexIndex: null,
+    changingVortexInputRow: {
         nodeNumber: "",
-        isNodeNumberCorrect: true,
+        isVortexNumberCorrect: true,
         nodeForce: "",
-        isNodeForceCorrect: true,
+        isVortexForceCorrect: true,
     },
     leftSupport: {
         nodeNumber: null,
@@ -96,12 +113,12 @@ const initialState = {
     isCanvasShown: false
 };
 
-const rodsAndNodesReducer = (state = initialState, action) => {
+const rodsAndVortexsReducer = (state = initialState, action) => {
     let value = action.value;
     let isCorrect = true;
 
     switch (action.type) {
-        case NEW_ROD_AREA_CHANGED:
+        case NEW_STERN_AREA_CHANGED:
             if (
                 isNaN(Number(value)) ||
                 (Number(value) <= 0 && value.length !== 0)
@@ -110,13 +127,13 @@ const rodsAndNodesReducer = (state = initialState, action) => {
             }
             return {
                 ...state,
-                newRodInputRow: {
-                    ...state.newRodInputRow,
+                newSternInputRow: {
+                    ...state.newSternInputRow,
                     area: value,
                     isAreaCorrect: isCorrect,
                 },
             };
-        case NEW_ROD_LENGTH_CHANGED:
+        case NEW_STERN_LENGTH_CHANGED:
             if (
                 isNaN(Number(value)) ||
                 (Number(value) <= 0 && value.length !== 0)
@@ -125,13 +142,13 @@ const rodsAndNodesReducer = (state = initialState, action) => {
             }
             return {
                 ...state,
-                newRodInputRow: {
-                    ...state.newRodInputRow,
+                newSternInputRow: {
+                    ...state.newSternInputRow,
                     length: value,
                     isLengthCorrect: isCorrect,
                 },
             };
-        case NEW_ROD_MODULUS_CHANGED:
+        case NEW_STERN_MODULUS_CHANGED:
             if (
                 isNaN(Number(value)) ||
                 (Number(value) <= 0 && value.length !== 0)
@@ -140,13 +157,13 @@ const rodsAndNodesReducer = (state = initialState, action) => {
             }
             return {
                 ...state,
-                newRodInputRow: {
-                    ...state.newRodInputRow,
+                newSternInputRow: {
+                    ...state.newSternInputRow,
                     modulus: value,
                     isModulusCorrect: isCorrect,
                 },
             };
-        case NEW_ROD_SIGMA_CHANGED:
+        case NEW_STERN_SIGMA_CHANGED:
             if (
                 isNaN(Number(value)) ||
                 (Number(value) <= 0 && value.length !== 0)
@@ -155,36 +172,36 @@ const rodsAndNodesReducer = (state = initialState, action) => {
             }
             return {
                 ...state,
-                newRodInputRow: {
-                    ...state.newRodInputRow,
+                newSternInputRow: {
+                    ...state.newSternInputRow,
                     sigma: value,
                     isSigmaCorrect: isCorrect,
                 },
             };
-        case NEW_ROD_DISTLOAD_CHANGED:
+        case NEW_STERN_DISTLOAD_CHANGED:
             if (isNaN(Number(value))) {
                 isCorrect = false;
             }
             return {
                 ...state,
-                newRodInputRow: {
-                    ...state.newRodInputRow,
+                newSternInputRow: {
+                    ...state.newSternInputRow,
                     distLoad: value,
                     isDistLoadCorrect: isCorrect,
                 },
             };
-        case ADD_NEW_ROD:
+        case ADD_NEW_STERN:
             if (
-                state.newRodInputRow.area.length !== 0 &&
-                state.newRodInputRow.isAreaCorrect &&
-                state.newRodInputRow.length.length !== 0 &&
-                state.newRodInputRow.isLengthCorrect &&
-                state.newRodInputRow.modulus.length !== 0 &&
-                state.newRodInputRow.isModulusCorrect &&
-                state.newRodInputRow.sigma.length !== 0 &&
-                state.newRodInputRow.isSigmaCorrect &&
-                state.newRodInputRow.distLoad.length !== 0 &&
-                state.newRodInputRow.isDistLoadCorrect
+                state.newSternInputRow.area.length !== 0 &&
+                state.newSternInputRow.isAreaCorrect &&
+                state.newSternInputRow.length.length !== 0 &&
+                state.newSternInputRow.isLengthCorrect &&
+                state.newSternInputRow.modulus.length !== 0 &&
+                state.newSternInputRow.isModulusCorrect &&
+                state.newSternInputRow.sigma.length !== 0 &&
+                state.newSternInputRow.isSigmaCorrect &&
+                state.newSternInputRow.distLoad.length !== 0 &&
+                state.newSternInputRow.isDistLoadCorrect
             ) {
                 const newObj = {
                     ...state,
@@ -192,15 +209,15 @@ const rodsAndNodesReducer = (state = initialState, action) => {
                         ...state.rodsRows,
                         {
                             index: state.rodsRows.length + 1,
-                            area: Number(state.newRodInputRow.area),
-                            length: Number(state.newRodInputRow.length),
-                            modulus: Number(state.newRodInputRow.modulus),
-                            sigma: Number(state.newRodInputRow.sigma),
-                            distLoad: Number(state.newRodInputRow.distLoad),
+                            area: Number(state.newSternInputRow.area),
+                            length: Number(state.newSternInputRow.length),
+                            modulus: Number(state.newSternInputRow.modulus),
+                            sigma: Number(state.newSternInputRow.sigma),
+                            distLoad: Number(state.newSternInputRow.distLoad),
                             reactKey: uuidv4(),
                         },
                     ],
-                    newRodInputRow: {
+                    newSternInputRow: {
                         area: "",
                         isAreaCorrect: true,
                         length: "",
@@ -217,32 +234,32 @@ const rodsAndNodesReducer = (state = initialState, action) => {
             } else {
                 return {
                     ...state,
-                    newRodInputRow: {
-                        ...state.newRodInputRow,
+                    newSternInputRow: {
+                        ...state.newSternInputRow,
                         isAreaCorrect:
-                            state.newRodInputRow.area.length !== 0 &&
-                            state.newRodInputRow.isAreaCorrect,
+                            state.newSternInputRow.area.length !== 0 &&
+                            state.newSternInputRow.isAreaCorrect,
                         isLengthCorrect:
-                            state.newRodInputRow.length.length !== 0 &&
-                            state.newRodInputRow.isLengthCorrect,
+                            state.newSternInputRow.length.length !== 0 &&
+                            state.newSternInputRow.isLengthCorrect,
                         isModulusCorrect:
-                            state.newRodInputRow.modulus.length !== 0 &&
-                            state.newRodInputRow.isModulusCorrect,
+                            state.newSternInputRow.modulus.length !== 0 &&
+                            state.newSternInputRow.isModulusCorrect,
                         isSigmaCorrect:
-                            state.newRodInputRow.sigma.length !== 0 &&
-                            state.newRodInputRow.isSigmaCorrect,
+                            state.newSternInputRow.sigma.length !== 0 &&
+                            state.newSternInputRow.isSigmaCorrect,
                         isDistLoadCorrect:
-                            state.newRodInputRow.distLoad.length !== 0 &&
-                            state.newRodInputRow.isDistLoadCorrect,
+                            state.newSternInputRow.distLoad.length !== 0 &&
+                            state.newSternInputRow.isDistLoadCorrect,
                     },
                 };
             }
-        case CHANGE_ROD:
+        case CHANGE_STERN:
             return {
                 ...state,
-                changingRodIndex: action.index,
-                changingRodInputRow: {
-                    ...state.changingRodInputRow,
+                changingSternIndex: action.index,
+                changingSternInputRow: {
+                    ...state.changingSternInputRow,
                     area: state.rodsRows[action.index - 1].area,
                     length: state.rodsRows[action.index - 1].length,
                     modulus: state.rodsRows[action.index - 1].modulus,
@@ -250,19 +267,19 @@ const rodsAndNodesReducer = (state = initialState, action) => {
                     distLoad: state.rodsRows[action.index - 1].distLoad,
                 },
             };
-        case CHANGING_ROD_AREA_CHANGED:
+        case CHANGING_STERN_AREA_CHANGED:
             if (isNaN(Number(value)) || Number(value) <= 0) {
                 isCorrect = false;
             }
             return {
                 ...state,
-                changingRodInputRow: {
-                    ...state.changingRodInputRow,
+                changingSternInputRow: {
+                    ...state.changingSternInputRow,
                     area: value,
                     isAreaCorrect: isCorrect,
                 },
             };
-        case CHANGING_ROD_LENGTH_CHANGED:
+        case CHANGING_STERN_LENGTH_CHANGED:
             if (
                 isNaN(Number(value)) ||
                 (Number(value) <= 0 && value.length !== 0)
@@ -271,13 +288,13 @@ const rodsAndNodesReducer = (state = initialState, action) => {
             }
             return {
                 ...state,
-                changingRodInputRow: {
-                    ...state.changingRodInputRow,
+                changingSternInputRow: {
+                    ...state.changingSternInputRow,
                     length: value,
                     isLengthCorrect: isCorrect,
                 },
             };
-        case CHANGING_ROD_MODULUS_CHANGED:
+        case CHANGING_STERN_MODULUS_CHANGED:
             if (
                 isNaN(Number(value)) ||
                 (Number(value) <= 0 && value.length !== 0)
@@ -286,13 +303,13 @@ const rodsAndNodesReducer = (state = initialState, action) => {
             }
             return {
                 ...state,
-                changingRodInputRow: {
-                    ...state.changingRodInputRow,
+                changingSternInputRow: {
+                    ...state.changingSternInputRow,
                     modulus: value,
                     isModulusCorrect: isCorrect,
                 },
             };
-        case CHANGING_ROD_SIGMA_CHANGED:
+        case CHANGING_STERN_SIGMA_CHANGED:
             if (
                 isNaN(Number(value)) ||
                 (Number(value) <= 0 && value.length !== 0)
@@ -301,59 +318,59 @@ const rodsAndNodesReducer = (state = initialState, action) => {
             }
             return {
                 ...state,
-                changingRodInputRow: {
-                    ...state.changingRodInputRow,
+                changingSternInputRow: {
+                    ...state.changingSternInputRow,
                     sigma: value,
                     isSigmaCorrect: isCorrect,
                 },
             };
-        case CHANGING_ROD_DISTLOAD_CHANGED:
+        case CHANGING_STERN_DISTLOAD_CHANGED:
             if (isNaN(Number(value))) {
                 isCorrect = false;
             }
             return {
                 ...state,
-                changingRodInputRow: {
-                    ...state.changingRodInputRow,
+                changingSternInputRow: {
+                    ...state.changingSternInputRow,
                     distLoad: value,
                     isDistLoadCorrect: isCorrect,
                 },
             };
-        case CHANGING_ROD_SUBMIT: {
+        case CHANGING_STERN_SUBMIT: {
             if (
-                state.changingRodInputRow.area.length !== 0 &&
-                state.changingRodInputRow.isAreaCorrect &&
-                state.changingRodInputRow.length.length !== 0 &&
-                state.changingRodInputRow.isLengthCorrect &&
-                state.changingRodInputRow.modulus.length !== 0 &&
-                state.changingRodInputRow.isModulusCorrect &&
-                state.changingRodInputRow.sigma.length !== 0 &&
-                state.changingRodInputRow.isSigmaCorrect &&
-                state.changingRodInputRow.distLoad.length !== 0 &&
-                state.changingRodInputRow.isDistLoadCorrect
+                state.changingSternInputRow.area.length !== 0 &&
+                state.changingSternInputRow.isAreaCorrect &&
+                state.changingSternInputRow.length.length !== 0 &&
+                state.changingSternInputRow.isLengthCorrect &&
+                state.changingSternInputRow.modulus.length !== 0 &&
+                state.changingSternInputRow.isModulusCorrect &&
+                state.changingSternInputRow.sigma.length !== 0 &&
+                state.changingSternInputRow.isSigmaCorrect &&
+                state.changingSternInputRow.distLoad.length !== 0 &&
+                state.changingSternInputRow.isDistLoadCorrect
             ) {
-                const changedRodData = {
-                    index: state.changingRodIndex,
-                    area: Number(state.changingRodInputRow.area),
-                    length: Number(state.changingRodInputRow.length),
-                    modulus: Number(state.changingRodInputRow.modulus),
-                    sigma: Number(state.changingRodInputRow.sigma),
-                    distLoad: Number(state.changingRodInputRow.distLoad),
+                const changedSternData = {
+                    index: state.changingSternIndex,
+                    area: Number(state.changingSternInputRow.area),
+                    length: Number(state.changingSternInputRow.length),
+                    modulus: Number(state.changingSternInputRow.modulus),
+                    sigma: Number(state.changingSternInputRow.sigma),
+                    distLoad: Number(state.changingSternInputRow.distLoad),
                 };
-                let changedRodsRows = JSON.parse(
+                let changedSternsRows = JSON.parse(
                     JSON.stringify(state.rodsRows)
                 );
-                changedRodsRows.splice(
-                    state.changingRodIndex - 1,
+                changedSternsRows.splice(
+                    state.changingSternIndex - 1,
                     1,
-                    changedRodData
+                    changedSternData
                 );
 
                 const newObj = {
                     ...state,
-                    rodsRows: changedRodsRows,
-                    changingRodIndex: null,
-                    changingRodInputRow: {
+                    rodsRows: changedSternsRows,
+                    changingSternIndex: null,
+                    changingSternInputRow: {
                         area: "",
                         isAreaCorrect: true,
                         length: "",
@@ -370,72 +387,72 @@ const rodsAndNodesReducer = (state = initialState, action) => {
             } else {
                 return {
                     ...state,
-                    changingRodInputRow: {
-                        ...state.changingRodInputRow,
+                    changingSternInputRow: {
+                        ...state.changingSternInputRow,
                         isAreaCorrect:
-                            state.changingRodInputRow.area.length !== 0 &&
-                            state.changingRodInputRow.isAreaCorrect,
+                            state.changingSternInputRow.area.length !== 0 &&
+                            state.changingSternInputRow.isAreaCorrect,
                         isLengthCorrect:
-                            state.changingRodInputRow.length.length !== 0 &&
-                            state.changingRodInputRow.isLengthCorrect,
+                            state.changingSternInputRow.length.length !== 0 &&
+                            state.changingSternInputRow.isLengthCorrect,
                         isModulusCorrect:
-                            state.changingRodInputRow.modulus.length !== 0 &&
-                            state.changingRodInputRow.isModulusCorrect,
+                            state.changingSternInputRow.modulus.length !== 0 &&
+                            state.changingSternInputRow.isModulusCorrect,
                         isSigmaCorrect:
-                            state.changingRodInputRow.sigma.length !== 0 &&
-                            state.changingRodInputRow.isSigmaCorrect,
+                            state.changingSternInputRow.sigma.length !== 0 &&
+                            state.changingSternInputRow.isSigmaCorrect,
                         isDistLoadCorrect:
-                            state.changingRodInputRow.distLoad.length !== 0 &&
-                            state.changingRodInputRow.isDistLoadCorrect,
+                            state.changingSternInputRow.distLoad.length !== 0 &&
+                            state.changingSternInputRow.isDistLoadCorrect,
                     },
                 };
             }
         }
-        case REMOVE_ROD_ROW:
-            let filteredRodsRows = [...state.rodsRows];
-            filteredRodsRows.splice(action.index - 1, 1);
-            filteredRodsRows.forEach((rodRow, index) => {
+        case REMOVE_STERN_ROW:
+            let filteredSternsRows = [...state.rodsRows];
+            filteredSternsRows.splice(action.index - 1, 1);
+            filteredSternsRows.forEach((rodRow, index) => {
                 rodRow.index = index + 1;
             });
 
             return {
                 ...state,
-                rodsRows: filteredRodsRows,
-                isReadyForSave: filteredRodsRows.length > 0,
+                rodsRows: filteredSternsRows,
+                isReadyForSave: filteredSternsRows.length > 0,
             };
         case ADD_NODE_ROW:
             if (
-                state.newNodeInputRow.nodeNumber.length !== 0 &&
-                state.newNodeInputRow.isNodeNumberCorrect &&
-                state.newNodeInputRow.nodeForce.length !== 0 &&
-                state.newNodeInputRow.isNodeForceCorrect
+                state.newVortexInputRow.nodeNumber.length !== 0 &&
+                state.newVortexInputRow.isVortexNumberCorrect &&
+                state.newVortexInputRow.nodeForce.length !== 0 &&
+                state.newVortexInputRow.isVortexForceCorrect
             ) {
-                const newNodeData = {
-                    nodeNumber: Number(state.newNodeInputRow.nodeNumber),
-                    nodeForce: Number(state.newNodeInputRow.nodeForce),
+                const newVortexData = {
+                    nodeNumber: Number(state.newVortexInputRow.nodeNumber),
+                    nodeForce: Number(state.newVortexInputRow.nodeForce),
                     reactKey: uuidv4(),
                 };
                 return {
                     ...state,
-                    nodesRows: [...state.nodesRows, newNodeData],
-                    newNodeInputRow: {
+                    nodesRows: [...state.nodesRows, newVortexData],
+                    newVortexInputRow: {
                         nodeNumber: "",
-                        isNodeNumberCorrect: true,
+                        isVortexNumberCorrect: true,
                         nodeForce: "",
-                        isNodeForceCorrect: true,
+                        isVortexForceCorrect: true,
                     },
                 };
             } else {
                 return {
                     ...state,
-                    newNodeInputRow: {
-                        ...state.newNodeInputRow,
-                        isNodeNumberCorrect:
-                            state.newNodeInputRow.nodeNumber.length !== 0 &&
-                            state.newNodeInputRow.isNodeNumberCorrect,
-                        isNodeForceCorrect:
-                            state.newNodeInputRow.nodeForce.length !== 0 &&
-                            state.newNodeInputRow.isNodeForceCorrect,
+                    newVortexInputRow: {
+                        ...state.newVortexInputRow,
+                        isVortexNumberCorrect:
+                            state.newVortexInputRow.nodeNumber.length !== 0 &&
+                            state.newVortexInputRow.isVortexNumberCorrect,
+                        isVortexForceCorrect:
+                            state.newVortexInputRow.nodeForce.length !== 0 &&
+                            state.newVortexInputRow.isVortexForceCorrect,
                     },
                 };
             }
@@ -448,10 +465,10 @@ const rodsAndNodesReducer = (state = initialState, action) => {
             }
             return {
                 ...state,
-                newNodeInputRow: {
-                    ...state.newNodeInputRow,
+                newVortexInputRow: {
+                    ...state.newVortexInputRow,
                     nodeNumber: value,
-                    isNodeNumberCorrect: isCorrect,
+                    isVortexNumberCorrect: isCorrect,
                 },
             };
         }
@@ -461,19 +478,19 @@ const rodsAndNodesReducer = (state = initialState, action) => {
             }
             return {
                 ...state,
-                newNodeInputRow: {
-                    ...state.newNodeInputRow,
+                newVortexInputRow: {
+                    ...state.newVortexInputRow,
                     nodeForce: value,
-                    isNodeForceCorrect: isCorrect,
+                    isVortexForceCorrect: isCorrect,
                 },
             };
         }
         case CHANGE_NODE:
             return {
                 ...state,
-                changingNodeIndex: action.index,
-                changingNodeInputRow: {
-                    ...state.changingNodeInputRow,
+                changingVortexIndex: action.index,
+                changingVortexInputRow: {
+                    ...state.changingVortexInputRow,
                     nodeNumber: state.nodesRows[action.index].nodeNumber,
                     nodeForce: state.nodesRows[action.index].nodeForce,
                 },
@@ -487,10 +504,10 @@ const rodsAndNodesReducer = (state = initialState, action) => {
             }
             return {
                 ...state,
-                changingNodeInputRow: {
-                    ...state.changingNodeInputRow,
+                changingVortexInputRow: {
+                    ...state.changingVortexInputRow,
                     nodeNumber: value,
-                    isNodeNumberCorrect: isCorrect,
+                    isVortexNumberCorrect: isCorrect,
                 },
             };
         case CHANGING_NODE_FORCE_CHANGED:
@@ -499,63 +516,63 @@ const rodsAndNodesReducer = (state = initialState, action) => {
             }
             return {
                 ...state,
-                changingNodeInputRow: {
-                    ...state.changingNodeInputRow,
+                changingVortexInputRow: {
+                    ...state.changingVortexInputRow,
                     nodeForce: value,
-                    isNodeForceCorrect: isCorrect,
+                    isVortexForceCorrect: isCorrect,
                 },
             };
         case CHANGING_NODE_SUBMIT:
             if (
-                state.changingNodeInputRow.nodeNumber.length !== 0 &&
-                state.changingNodeInputRow.isNodeNumberCorrect &&
-                state.changingNodeInputRow.nodeForce.length !== 0 &&
-                state.changingNodeInputRow.isNodeForceCorrect
+                state.changingVortexInputRow.nodeNumber.length !== 0 &&
+                state.changingVortexInputRow.isVortexNumberCorrect &&
+                state.changingVortexInputRow.nodeForce.length !== 0 &&
+                state.changingVortexInputRow.isVortexForceCorrect
             ) {
-                const changedNodeData = {
-                    nodeNumber: Number(state.changingNodeInputRow.nodeNumber),
-                    nodeForce: Number(state.changingNodeInputRow.nodeForce),
+                const changedVortexData = {
+                    nodeNumber: Number(state.changingVortexInputRow.nodeNumber),
+                    nodeForce: Number(state.changingVortexInputRow.nodeForce),
                     reactKey: uuidv4(),
                 };
-                let changedNodesRows = JSON.parse(
+                let changedVortexsRows = JSON.parse(
                     JSON.stringify(state.nodesRows)
                 );
-                changedNodesRows.splice(
-                    state.changingNodeIndex,
+                changedVortexsRows.splice(
+                    state.changingVortexIndex,
                     1,
-                    changedNodeData
+                    changedVortexData
                 );
                 return {
                     ...state,
-                    nodesRows: changedNodesRows,
-                    changingNodeIndex: null,
-                    changingNodeInputRow: {
+                    nodesRows: changedVortexsRows,
+                    changingVortexIndex: null,
+                    changingVortexInputRow: {
                         nodeNumber: "",
-                        isNodeNumberCorrect: true,
+                        isVortexNumberCorrect: true,
                         nodeForce: "",
-                        isNodeForceCorrect: true,
+                        isVortexForceCorrect: true,
                     },
                 };
             } else {
                 return {
                     ...state,
-                    newNodeInputRow: {
-                        ...state.newNodeInputRow,
-                        isNodeNumberCorrect:
-                            state.newNodeInputRow.nodeNumber.length !== 0 &&
-                            state.newNodeInputRow.isNodeNumberCorrect,
-                        isNodeForceCorrect:
-                            state.newNodeInputRow.nodeForce.length !== 0 &&
-                            state.newNodeInputRow.isNodeForceCorrect,
+                    newVortexInputRow: {
+                        ...state.newVortexInputRow,
+                        isVortexNumberCorrect:
+                            state.newVortexInputRow.nodeNumber.length !== 0 &&
+                            state.newVortexInputRow.isVortexNumberCorrect,
+                        isVortexForceCorrect:
+                            state.newVortexInputRow.nodeForce.length !== 0 &&
+                            state.newVortexInputRow.isVortexForceCorrect,
                     },
                 };
             }
         case REMOVE_NODE_ROW:
-            let filteredNodesRows = [...state.nodesRows];
-            filteredNodesRows.splice(action.index, 1);
+            let filteredVortexsRows = [...state.nodesRows];
+            filteredVortexsRows.splice(action.index, 1);
             return {
                 ...state,
-                nodesRows: filteredNodesRows,
+                nodesRows: filteredVortexsRows,
             };
 
         case CHANGE_LEFT_SUPPORT:
@@ -606,7 +623,7 @@ const rodsAndNodesReducer = (state = initialState, action) => {
                         "В конструкции должна быть хотя бы одна заделка",
                     isReadyForSave: false,
                 };
-            } else if (state.changingRodIndex !== null) {
+            } else if (state.changingSternIndex !== null) {
                 return {
                     ...state,
                     isError: true,
@@ -673,99 +690,99 @@ const rodsAndNodesReducer = (state = initialState, action) => {
     }
 };
 
-export default rodsAndNodesReducer;
+export default rodsAndVortexsReducer;
 
-export const addNewRod = () => ({ type: ADD_NEW_ROD });
-export const newRodAreaChanged = (value) => ({
-    type: NEW_ROD_AREA_CHANGED,
+export const addNewStern = () => ({ type: ADD_NEW_STERN });
+export const newSternAreaChanged = (value) => ({
+    type: NEW_STERN_AREA_CHANGED,
     value,
 });
-export const newRodLengthChanged = (value) => ({
-    type: NEW_ROD_LENGTH_CHANGED,
+export const newSternLengthChanged = (value) => ({
+    type: NEW_STERN_LENGTH_CHANGED,
     value,
 });
-export const newRodModulusChanged = (value) => ({
-    type: NEW_ROD_MODULUS_CHANGED,
+export const newSternModulusChanged = (value) => ({
+    type: NEW_STERN_MODULUS_CHANGED,
     value,
 });
-export const newRodSigmaChanged = (value) => ({
-    type: NEW_ROD_SIGMA_CHANGED,
+export const newSternSigmaChanged = (value) => ({
+    type: NEW_STERN_SIGMA_CHANGED,
     value,
 });
-export const newRodDistLoadChanged = (value) => ({
-    type: NEW_ROD_DISTLOAD_CHANGED,
+export const newSternDistLoadChanged = (value) => ({
+    type: NEW_STERN_DISTLOAD_CHANGED,
     value,
 });
 
-export const changeRod = (index) => ({
-    type: CHANGE_ROD,
+export const changeStern = (index) => ({
+    type: CHANGE_STERN,
     index,
 });
-export const changingRodAreaChanged = (value) => ({
-    type: CHANGING_ROD_AREA_CHANGED,
+export const changingSternAreaChanged = (value) => ({
+    type: CHANGING_STERN_AREA_CHANGED,
     value,
 });
-export const changingRodLengthChanged = (value) => ({
-    type: CHANGING_ROD_LENGTH_CHANGED,
+export const changingSternLengthChanged = (value) => ({
+    type: CHANGING_STERN_LENGTH_CHANGED,
     value,
 });
-export const changingRodModulusChanged = (value) => ({
-    type: CHANGING_ROD_MODULUS_CHANGED,
+export const changingSternModulusChanged = (value) => ({
+    type: CHANGING_STERN_MODULUS_CHANGED,
     value,
 });
-export const changingRodSigmaChanged = (value) => ({
-    type: CHANGING_ROD_SIGMA_CHANGED,
+export const changingSternSigmaChanged = (value) => ({
+    type: CHANGING_STERN_SIGMA_CHANGED,
     value,
 });
-export const changingRodDistLoadChanged = (value) => ({
-    type: CHANGING_ROD_DISTLOAD_CHANGED,
+export const changingSternDistLoadChanged = (value) => ({
+    type: CHANGING_STERN_DISTLOAD_CHANGED,
     value,
 });
 
-export const changingRodSubmit = () => ({
-    type: CHANGING_ROD_SUBMIT,
+export const changingSternSubmit = () => ({
+    type: CHANGING_STERN_SUBMIT,
 });
 
-export const removeRodRow = (index) => ({
-    type: REMOVE_ROD_ROW,
+export const removeSternRow = (index) => ({
+    type: REMOVE_STERN_ROW,
     index,
 });
 
-export const addNodeRow = () => ({
+export const addVortexRow = () => ({
     type: ADD_NODE_ROW,
 });
 
-export const removeNodeRow = (index) => ({
+export const removeVortexRow = (index) => ({
     type: REMOVE_NODE_ROW,
     index,
 });
 
-export const changeNode = (index) => ({
+export const changeVortex = (index) => ({
     type: CHANGE_NODE,
     index,
 });
 
-export const newNodeNumberChanged = (value) => ({
+export const newVortexNumberChanged = (value) => ({
     type: NEW_NODE_NUMBER_CHANGED,
     value,
 });
 
-export const newNodeForceChanged = (value) => ({
+export const newVortexForceChanged = (value) => ({
     type: NEW_NODE_FORCE_CHANGED,
     value,
 });
 
-export const changingNodeNumberChanged = (value) => ({
+export const changingVortexNumberChanged = (value) => ({
     type: CHANGING_NODE_NUMBER_CHANGED,
     value,
 });
 
-export const changingNodeForceChanged = (value) => ({
+export const changingVortexForceChanged = (value) => ({
     type: CHANGING_NODE_FORCE_CHANGED,
     value,
 });
 
-export const changingNodeSubmit = () => ({
+export const changingVortexSubmit = () => ({
     type: CHANGING_NODE_SUBMIT,
 });
 
@@ -783,16 +800,16 @@ export const checkForError = () => ({ type: CHECK_FOR_ERROR });
 
 export const downloadConstruction = () => (dispatch, getState) => {
     dispatch(checkForError());
-    if (getState().rodsAndNodes.isReadyForSave) {
-        const state = getState().rodsAndNodes;
+    if (getState().rodsAndVortexs.isReadyForSave) {
+        const state = getState().rodsAndVortexs;
         const objForDownload = {
-            rods: state.rodsRows.map((rod) => {
+            rods: state.rodsRows.map((stem) => {
                 return [
-                    rod.area,
-                    rod.length,
-                    rod.modulus,
-                    rod.sigma,
-                    rod.distLoad,
+                    stem.area,
+                    stem.length,
+                    stem.modulus,
+                    stem.sigma,
+                    stem.distLoad,
                 ];
             }),
             nodes: state.nodesRows.map((node) => [
@@ -821,85 +838,7 @@ export const showFileReadingError = (message) => ({
     message,
 });
 
-export const handleFileOpening = (inputRef) => (dispatch, getState) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-        let data = JSON.parse(reader.result);
-        let newConstructionObj = {};
-        newConstructionObj.rodsRows = data.rods.map((rodData, index) => {
-            return {
-                index: index + 1,
-                area: rodData[0],
-                length: rodData[1],
-                modulus: rodData[2],
-                sigma: rodData[3],
-                distLoad: rodData[4],
-                reactKey: uuidv4(),
-            };
-        });
-        newConstructionObj.nodesRows = data.nodes.map((nodeData, index) => {
-            return {
-                nodeNumber: nodeData[0],
-                nodeForce: nodeData[1],
-                reactKey: uuidv4(),
-            };
-        });
-        newConstructionObj.leftSupport = {
-            nodeNumber: data.left ? 1 : null,
-            isChecked: data.left,
-        };
-        newConstructionObj.rightSupport = {
-            nodeNumber: data.right
-                ? newConstructionObj.rodsRows.length + 1
-                : null,
-            isChecked: data.right,
-        };
-        newConstructionObj.changingRodIndex = null;
-        newConstructionObj.changingRodInputRow = {
-            area: "",
-            isAreaCorrect: true,
-            length: "",
-            isLengthCorrect: true,
-            modulus: "",
-            isModulusCorrect: true,
-            sigma: "",
-            isSigmaCorrect: true,
-            distLoad: "",
-            isDistLoadCorrect: true,
-        };
-        newConstructionObj.newRodInputRow = {
-            area: "",
-            isAreaCorrect: true,
-            length: "",
-            isLengthCorrect: true,
-            modulus: "",
-            isModulusCorrect: true,
-            sigma: "",
-            isSigmaCorrect: true,
-            distLoad: "",
-            isDistLoadCorrect: true,
-        };
-        newConstructionObj.newNodeInputRow = {
-            nodeNumber: "",
-            isNodeNumberCorrect: true,
-            nodeForce: "",
-            isNodeForceCorrect: true,
-        };
-        newConstructionObj.changingNodeIndex = null;
-        newConstructionObj.changingNodeInputRow = {
-            nodeNumber: "",
-            isNodeNumberCorrect: true,
-            nodeForce: "",
-            isNodeForceCorrect: true,
-        };
-        newConstructionObj.isError = false;
-        newConstructionObj.errorMessage = "";
-        newConstructionObj.isReadyForSave = true;
-        newConstructionObj.objWithSolutionFunctions = null;
-        dispatch(setNewConstructionFromFileData(newConstructionObj));
-    };
-    reader.readAsText(inputRef.current.files[0]);
-};
+
 
 export const saveSolution = (solutionObj) => ({
     type: SAVE_SOLUTION,
